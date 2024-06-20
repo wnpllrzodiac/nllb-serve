@@ -19,13 +19,15 @@ class Translator:
     def __init__(self, model_id):
         self.model_id = model_id
         log.info(f"Loading model {model_id} ...")
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_id).to(device)
+        #self.model = AutoModelForSeq2SeqLM.from_pretrained(model_id).to(device)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained("D:/git/nllb-200-3.3B").cuda()
  
     @lru_cache(maxsize=256)
     def get_tokenizer(self, src_lang):
         log.info(f"Loading tokenizer for {self.model_id}; src_lang={src_lang} ...")
         #tokenizer = AutoTokenizer.from_pretrained(model_id)
-        return AutoTokenizer.from_pretrained(self.model_id, src_lang=src_lang)
+        #return AutoTokenizer.from_pretrained(self.model_id, src_lang=src_lang)
+        return AutoTokenizer.from_pretrained("D:/git/nllb-200-3.3B")
 
     def translate_batch(self, src_sents: List[str], src_lang, tgt_lang, max_tgt_length=DEF_MAX_TGT_LEN):
         tokenizer = self.get_tokenizer(src_lang=src_lang)

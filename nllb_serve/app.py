@@ -24,7 +24,7 @@ log.info(f'torch device={device}')
 
 #DEF_MODEL_ID = "facebook/nllb-200-distilled-600M"
 DEF_SRC_LNG = 'eng_Latn'
-DEF_TGT_LNG = 'kan_Knda'
+DEF_TGT_LNG = 'zho_Hans' #'kan_Knda'
 FLOAT_POINTS = 4
 exp = None
 app = Flask(__name__)
@@ -84,9 +84,11 @@ def attach_translate_route(
     torch.set_grad_enabled(False)
 
     log.info(f"Loading model {model_id} ...")
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_id).to(device).eval()
+    #model = AutoModelForSeq2SeqLM.from_pretrained(model_id).to(device).eval()
+    model = AutoModelForSeq2SeqLM.from_pretrained("D:/git/nllb-200-3.3B").cuda()
     log.info(f"Loading default tokenizer for {model_id} ...")
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    #tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained("D:/git/nllb-200-3.3B")
     src_langs = tokenizer.additional_special_tokens
     tgt_langs = src_langs
 
@@ -94,7 +96,8 @@ def attach_translate_route(
     def get_tokenizer(src_lang=def_src_lang):
         log.info(f"Loading tokenizer for {model_id}; src_lang={src_lang} ...")
         #tokenizer = AutoTokenizer.from_pretrained(model_id)
-        return AutoTokenizer.from_pretrained(model_id, src_lang=src_lang)
+        #return AutoTokenizer.from_pretrained(model_id, src_lang=src_lang)
+        return AutoTokenizer.from_pretrained("D:/git/nllb-200-3.3B", src_lang=src_lang)
 
     @bp.route('/')
     def index():
